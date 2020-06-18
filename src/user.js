@@ -1,15 +1,7 @@
-const path = require('path');
-const Firestore = require('@google-cloud/firestore');
 const bcrypt = require('bcryptjs');
+const db = require('./db.js');
 
 const BCRYPT_SALT_ROUNDS = 12;
-const FIRESTORE_KEYFILE = process.env.FIRESTORE_KEYFILE
-  || path.join(__dirname, '../../secrets/firestore-cym.json');
-
-const db = new Firestore({
-  projectId: 'techfrederick-hackathon-cym',
-  keyFilename: FIRESTORE_KEYFILE,
-});
 
 async function getUserDoc(username) {
   const snapshot = await db.collection('users').where('username', '==', username).get();

@@ -12,7 +12,7 @@ const LOCAL_CONFIG = {
 };
 
 const JWT_CONFIG = {
-  jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: secret,
 };
 
