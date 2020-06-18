@@ -4,39 +4,6 @@ const Event = require('../event.js');
 
 const router = express.Router();
 
-// const events = [
-// {
-// name: 'Lorem Ipsum Dolor',
-// partner: 'YMCA of Frederick County',
-// start: new Date(2020, 5, 29, 15).valueOf(),
-// end: new Date(2020, 5, 29, 16, 30).valueOf(),
-// },
-// {
-// name: 'Praesent Non Nisi Quam',
-// partner: 'Id Faucibus Mi',
-// start: new Date(2020, 5, 30, 17, 45).valueOf(),
-// end: new Date(2020, 5, 29, 20).valueOf(),
-// },
-// {
-// name: 'Sed Semper',
-// partner: 'Nunc Non Libero, Donec Lacinia',
-// start: new Date(2020, 6, 2, 16).valueOf(),
-// end: new Date(2020, 6, 2, 18).valueOf(),
-// },
-// {
-// name: 'Justo Sit Amet Eleifend',
-// partner: 'Tristique At Ultricies Eget',
-// start: new Date(2020, 6, 2, 13, 30).valueOf(),
-// end: new Date(2020, 6, 2, 15, 30).valueOf(),
-// },
-// {
-// name: 'Lacina Arcu Sapien',
-// partner: 'Nullam Auctor',
-// start: new Date(2020, 6, 6, 15, 15).valueOf(),
-// end: new Date(2020, 6, 6, 16, 15).valueOf(),
-// },
-// ];
-
 // Get event list
 router.get('/', async (req, res) => {
   const [events, err] = await Event.getAll();
@@ -78,6 +45,50 @@ router.post('/', (req, res) => {
     }
 
     res.json({ event });
+  })(req, res);
+});
+
+// Update an event
+router.put('/:id', (req, res) => {
+  auth.authenticate('jwt', async (error, user) => {
+    if (error) {
+      res.status(401).json({ error });
+      return;
+    }
+    if (!user) {
+      res.status(401).json({ error: 'Not authorized' });
+      return;
+    }
+
+    const [event, err] = await Event.update(req.params.id, req.body);
+    if (err) {
+      res.status(err.status).json({ error: err.message });
+      return;
+    }
+
+    res.json({ event });
+  })(req, res);
+});
+
+// Delete an event
+router.delete('/:id', (req, res) => {
+  auth.authenticate('jwt', async (error, user) => {
+    if (error) {
+      res.status(401).json({ error });
+      return;
+    }
+    if (!user) {
+      res.status(401).json({ error: 'Not authorized' });
+      return;
+    }
+
+    const err = await Event.destroy(req.params.id);
+    if (err) {
+      res.status(err.status).json({ error: err.message });
+      return;
+    }
+
+    res.json({ deleted: req.params.id });
   })(req, res);
 });
 

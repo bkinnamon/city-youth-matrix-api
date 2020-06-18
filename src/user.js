@@ -2,9 +2,10 @@ const bcrypt = require('bcryptjs');
 const db = require('./db.js');
 
 const BCRYPT_SALT_ROUNDS = 12;
+const collectionName = process.env.DEBUG ? 'test_users' : 'users';
 
 async function getUserDoc(username) {
-  const snapshot = await db.collection('users').where('username', '==', username).get();
+  const snapshot = await db.collection(collectionName).where('username', '==', username).get();
   if (snapshot.size !== 1) return null;
   return snapshot.docs[0];
 }
@@ -34,7 +35,7 @@ async function register(username, password) {
     username,
     passHash,
   };
-  const userDocRef = await db.collection('users').add(user);
+  const userDocRef = await db.collection(collectionName).add(user);
   const userDoc = await userDocRef.get();
 
   return [docToUser(userDoc), null];
@@ -48,7 +49,7 @@ async function login(username, password) {
 }
 
 async function getUser(id) {
-  const userDoc = await db.collection('users').doc(id).get();
+  const userDoc = await db.collection(collectionName).doc(id).get();
   if (!userDoc.exists) return [null, 'Invalid JWT.'];
   return [docToUser(userDoc), null];
 }
