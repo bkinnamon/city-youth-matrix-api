@@ -35,6 +35,7 @@ async function register(username, password) {
     username,
     passHash,
     name: username,
+    types: [],
     contactInfo: {
       address1: null,
       address2: null,
