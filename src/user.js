@@ -34,6 +34,15 @@ async function register(username, password) {
   const user = {
     username,
     passHash,
+    name: username,
+    contactInfo: {
+      address1: null,
+      address2: null,
+      city: null,
+      state: null,
+      zip: null,
+      phone: null,
+    },
   };
   const userDocRef = await db.collection(collectionName).add(user);
   const userDoc = await userDocRef.get();
@@ -48,14 +57,39 @@ async function login(username, password) {
   return [docToUser(userDoc), null];
 }
 
-async function getUser(id) {
+async function getAll() {
+  const userDocs = await db.collection(collectionName).get();
+  const users = userDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  return [users, null];
+}
+
+async function get(id) {
   const userDoc = await db.collection(collectionName).doc(id).get();
-  if (!userDoc.exists) return [null, 'Invalid JWT.'];
+  if (!userDoc.exists) return [null, 'User not found.'];
   return [docToUser(userDoc), null];
+}
+
+async function update(id, userData) {
+  try {
+    await db.collection(collectionName).doc(id).update(userData);
+  } catch (err) {
+    return [null, 'User not found'];
+  }
+  return [{
+    ...userData,
+    id,
+  }, null];
+}
+
+async function destroy(id) {
+  await db.collection(collectionName).doc(id).delete();
 }
 
 module.exports = {
   register,
   login,
-  getUser,
+  getAll,
+  get,
+  update,
+  destroy,
 };
