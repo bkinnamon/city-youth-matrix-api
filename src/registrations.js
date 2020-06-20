@@ -51,7 +51,7 @@ async function destroy(id) {
   await db.collection(collectionName).doc(id).delete();
 }
 
-export default {
+module.exports = {
   create,
   getAll,
   get,

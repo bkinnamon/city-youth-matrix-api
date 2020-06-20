@@ -13,7 +13,7 @@ const notFound = {
   message: 'Not found',
 };
 
-export default {
+module.exports = {
   badRequest,
   unauthorized,
   notFound,
