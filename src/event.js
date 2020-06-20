@@ -1,16 +1,7 @@
 const db = require('./db.js');
+const errors = require('./errors.js');
 
 const collectionName = process.env.DEBUG ? 'test_events' : 'events';
-
-const errInvalid = {
-  status: 400,
-  message: 'The provided information was invalid',
-};
-
-const errNotFound = {
-  status: 404,
-  message: 'The event could not be found',
-};
 
 function isValid(event) {
   return event.name && event.partner && event.start && event.end && event.description;
@@ -31,12 +22,12 @@ async function getAll() {
 
 async function get(id) {
   const eventDoc = await db.collection(collectionName).doc(id).get();
-  if (!eventDoc.exists) return [null, errNotFound];
+  if (!eventDoc.exists) return [null, errors.notFound];
   return [docToEvent(eventDoc), null];
 }
 
 async function create(event) {
-  if (!isValid(event)) return [null, errInvalid];
+  if (!isValid(event)) return [null, errors.badRequest];
   const eventDocRef = await db.collection(collectionName).add(event);
   const eventDoc = await eventDocRef.get();
 
@@ -44,12 +35,12 @@ async function create(event) {
 }
 
 async function update(id, event) {
-  if (!isValid(event)) return [null, errInvalid];
-  if (!id) return [null, errInvalid];
+  if (!isValid(event)) return [null, errors.badRequest];
+  if (!id) return [null, errors.badRequest];
   try {
     await db.collection(collectionName).doc(id).update(event);
   } catch (err) {
-    return [null, errNotFound];
+    return [null, errors.notFound];
   }
 
   return [{
