@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user) {
+    if (!user || !user.type.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
@@ -55,12 +55,39 @@ router.put('/:id', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user) {
+    if (!user || !user.type.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
 
     const [event, err] = await Event.update(req.params.id, req.body);
+    if (err) {
+      res.status(err.status).json({ error: err.message });
+      return;
+    }
+
+    res.json({ event });
+  })(req, res);
+});
+
+// Registration update from a driver
+router.patch('/:id', (req, res) => {
+  auth.authenticate('jwt', async (error, user) => {
+    if (error) {
+      res.status(401).json({ error });
+      return;
+    }
+    if (!user || !user.type.includes('driver')) {
+      res.status(401).json({ error: 'Not authorized' });
+      return;
+    }
+
+    // Limit the data to JUST registrations data.
+    const data = {
+      registrations: req.body.registrations,
+    };
+
+    const [event, err] = await Event.update(req.params.id, data);
     if (err) {
       res.status(err.status).json({ error: err.message });
       return;
@@ -77,7 +104,7 @@ router.delete('/:id', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user) {
+    if (!user || !user.type.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }

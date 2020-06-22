@@ -18,7 +18,9 @@ router.post('/login', (req, res) => {
 
 router.get('/users', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
-    if (!user.type || !user.type.includes('dispatcher')) res.status(401).json({ error: 'Not authorized' });
+    if (!user.type || !user.type.includes('dispatcher')) {
+      res.status(401).json({ error: 'Not authorized' });
+    }
     const [users, err] = await Users.getAll();
     if (err) res.status(500).json({ error: err });
     res.json({ users });
@@ -28,7 +30,12 @@ router.get('/users', (req, res) => {
 router.get('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
-    if (id !== user.id || !user.type || !user.type.includes('dispatcher')) res.status(401).json({ error: 'Not authorized' });
+    if (id !== user.id
+      || !user.type
+      || !user.type.includes('dispatcher')
+    ) {
+      res.status(401).json({ error: 'Not authorized' });
+    }
     const [userData, err] = await Users.get(req.params.id);
     if (err) res.status(404).json({ error: err });
     res.json({ user: userData });
@@ -38,7 +45,12 @@ router.get('/users/:id', (req, res) => {
 router.put('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
-    if (id !== user.id || !user.type || !user.type.includes('dispatcher')) res.status(401).json({ error: 'Not authorized' });
+    if (id !== user.id
+      || !user.type
+      || !user.type.includes('dispatcher')
+    ) {
+      res.status(401).json({ error: 'Not authorized' });
+    }
     const [userData, err] = await Users.update(req.params.id, req.body);
     if (err) res.status(404).json({ error: err });
     res.json({ user: userData });
@@ -48,7 +60,12 @@ router.put('/users/:id', (req, res) => {
 router.delete('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
-    if (id !== user.id || !user.type || !user.type.includes('dispatcher')) res.status(401).json({ error: 'Not authorized' });
+    if (id !== user.id
+      || !user.type
+      || !user.type.includes('dispatcher')
+    ) {
+      res.status(401).json({ error: 'Not authorized' });
+    }
     await Users.delete(req.params.id);
     res.json({ deleted: req.params.id });
   })(req, res);
