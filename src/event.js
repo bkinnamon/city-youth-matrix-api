@@ -76,6 +76,21 @@ async function update(id, event) {
   }, null];
 }
 
+async function addReg(id, reg) {
+  if (!id) return [null, errors.badRequest];
+  const regDoc = await db.collection(collectionName).doc(id).get();
+  if (!regDoc.exists) return [null, errors.notFound];
+  const newRegList = [
+    ...regDoc.data().registrations,
+    reg,
+  ];
+  await db.collection(collectionName).doc(id).update({ registrations: newRegList });
+  return [{
+    ...docToEvent(regDoc),
+    registrations: newRegList,
+  }, null];
+}
+
 async function destroy(id) {
   await db.collection(collectionName).doc(id).delete();
 }
@@ -85,5 +100,6 @@ module.exports = {
   getAll,
   get,
   update,
+  addReg,
   destroy,
 };

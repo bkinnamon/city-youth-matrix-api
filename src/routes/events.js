@@ -82,12 +82,7 @@ router.patch('/:id', (req, res) => {
       return;
     }
 
-    // Limit the data to JUST registrations data.
-    const data = {
-      registrations: req.body.registrations,
-    };
-
-    const [event, err] = await Event.update(req.params.id, data);
+    const [event, err] = await Event.addReg(req.params.id, req.body);
     if (err) {
       res.status(err.status).json({ error: err.message });
       return;
