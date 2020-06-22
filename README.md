@@ -21,5 +21,6 @@ Authentication is performed through JSON Web Tokens (JWT). When you register or 
 - `/events` [GET]: Gets the list of all events.
 - `/events/:id` [GET]: Gets the specified event.
 - `/events/:id` [PUT]: Updates the specified event. Only a user with type `dispatcher` is allowed to perform this request.
+- `/events/:id` [PATCH]: Updates the registration list to be the provided registrations list. Limited to `driver` type users.
 - `/events/:id` [PATCH]: Adds a registration to the list. This can be done by a user with type `dispatcher` or `driver`.
 - `/events/:id` [DELETE]: Deletes an event. Only a user with type `dispatcher` is allowed to delete an event.

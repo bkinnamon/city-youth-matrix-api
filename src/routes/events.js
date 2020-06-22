@@ -81,8 +81,12 @@ router.patch('/:id', (req, res) => {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
+    if (!Array.isArray(req.body.registrations)) {
+      res.status(401).json({ error: 'registrations must be an array' });
+      return;
+    }
 
-    const [event, err] = await Event.addReg(req.params.id, req.body);
+    const [event, err] = await Event.setRegList(req.params.id, req.body.registrations);
     if (err) {
       res.status(err.status).json({ error: err.message });
       return;

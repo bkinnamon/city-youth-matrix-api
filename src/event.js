@@ -76,19 +76,17 @@ async function update(id, event) {
   }, null];
 }
 
-async function addReg(id, reg) {
+async function setRegList(id, regList) {
   if (!id) return [null, errors.badRequest];
-  const regDoc = await db.collection(collectionName).doc(id).get();
-  if (!regDoc.exists) return [null, errors.notFound];
-  const newRegList = [
-    ...regDoc.data().registrations,
-    reg,
-  ];
-  await db.collection(collectionName).doc(id).update({ registrations: newRegList });
-  return [{
-    ...docToEvent(regDoc),
-    registrations: newRegList,
-  }, null];
+  const eventDocRef = db.collection(collectionName).doc(id);
+  try {
+    await eventDocRef.update({ registrations: regList });
+  } catch (err) {
+    return [null, errors.notFound];
+  }
+  const regDoc = await eventDocRef.get();
+
+  return [docToEvent(regDoc), null];
 }
 
 async function destroy(id) {
@@ -100,6 +98,6 @@ module.exports = {
   getAll,
   get,
   update,
-  addReg,
+  setRegList,
   destroy,
 };
