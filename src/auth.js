@@ -54,6 +54,7 @@ passport.use(
 
 function getAuthResponse(error, user) {
   if (error) return { error };
+  if (!user) return { };
   return {
     user,
     token: jwt.sign({ id: user.id }, secret),
