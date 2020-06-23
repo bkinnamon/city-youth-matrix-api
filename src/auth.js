@@ -45,7 +45,9 @@ passport.use(
   new JWTStrategy(
     JWT_CONFIG,
     async (payload, done) => {
+      console.log(payload);
       const [user, error] = await User.get(payload.id);
+      console.log(user, error);
       if (error) done(error);
       done(null, user);
     },
