@@ -24,7 +24,7 @@ router.get('/token', (req, res) => {
 
 router.get('/users', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
-    if (!user.type || !user.type.includes('dispatcher')) {
+    if (!user.type || !user.types.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
     }
     const [users, err] = await Users.getAll();
@@ -37,8 +37,8 @@ router.get('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
     if (id !== user.id
-      || !user.type
-      || !user.type.includes('dispatcher')
+      || !user.types
+      || !user.types.includes('dispatcher')
     ) {
       res.status(401).json({ error: 'Not authorized' });
     }
@@ -52,8 +52,8 @@ router.put('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
     if (id !== user.id
-      || !user.type
-      || !user.type.includes('dispatcher')
+      || !user.types
+      || !user.types.includes('dispatcher')
     ) {
       res.status(401).json({ error: 'Not authorized' });
     }
@@ -67,8 +67,8 @@ router.delete('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
     if (id !== user.id
-      || !user.type
-      || !user.type.includes('dispatcher')
+      || !user.types
+      || !user.types.includes('dispatcher')
     ) {
       res.status(401).json({ error: 'Not authorized' });
     }
