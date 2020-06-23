@@ -11,15 +11,15 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  auth.authenticate('jwt', (error, user) => {
-    if (error || !user) {
-      auth.authenticate('login', (err, u) => {
-        res.json(getAuthResponse(err, u));
-      })(req, res);
-    } else {
-      res.json(getAuthResponse(error, user));
-    }
+  auth.authenticate('login', (error, user) => {
+    res.json(getAuthResponse(error, user));
   })(req, res);
+});
+
+router.post('/token', (req, res) => {
+  auth.authenticate('jwt', async (error, user) => {
+    res.json(getAuthResponse(error, user));
+  });
 });
 
 router.get('/users', (req, res) => {
