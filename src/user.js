@@ -65,6 +65,7 @@ async function getAll() {
 }
 
 async function get(id) {
+  if (!id) return [null, 'User not found.'];
   const userDoc = await db.collection(collectionName).doc(id).get();
   if (!userDoc.exists) return [null, 'User not found.'];
   return [docToUser(userDoc), null];
