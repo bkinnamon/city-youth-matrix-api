@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
   })(req, res);
 });
 
-router.post('/token', (req, res) => {
+router.get('/token', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     res.json(getAuthResponse(error, user));
   });
