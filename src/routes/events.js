@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user || !user.type.includes('dispatcher')) {
+    if (!user || !user.types.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
@@ -55,7 +55,7 @@ router.put('/:id', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user || !user.type.includes('dispatcher')) {
+    if (!user || !user.types.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
@@ -77,7 +77,7 @@ router.patch('/:id', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user || !user.type.includes('driver')) {
+    if (!user || !user.types.includes('driver')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
@@ -103,7 +103,7 @@ router.delete('/:id', (req, res) => {
       res.status(401).json({ error });
       return;
     }
-    if (!user || !user.type.includes('dispatcher')) {
+    if (!user || !user.types.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
       return;
     }
