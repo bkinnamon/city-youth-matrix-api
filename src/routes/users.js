@@ -37,8 +37,7 @@ router.get('/users/:id', (req, res) => {
   auth.authenticate('jwt', async (error, user) => {
     const { id } = req.params;
     if (id !== user.id
-      || !user.types
-      || !user.types.includes('dispatcher')
+      && (!user.types || !user.types.includes('dispatcher'))
     ) {
       res.status(401).json({ error: 'Not authorized' });
     }
