@@ -23,7 +23,9 @@ router.get('/token', (req, res) => {
 });
 
 router.get('/users', (req, res) => {
+  console.log('GETTING ALL USERS');
   auth.authenticate('jwt', async (error, user) => {
+    console.log(error, user);
     if (!user.type || !user.types.includes('dispatcher')) {
       res.status(401).json({ error: 'Not authorized' });
     }
