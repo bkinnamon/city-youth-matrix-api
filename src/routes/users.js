@@ -11,9 +11,8 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  // const token = ExtractJWT.fromAuthHeaderAsBearerToken()(req);
   auth.authenticate('jwt', (error, user) => {
-    if (error) {
+    if (error || !user) {
       auth.authenticate('login', (err, u) => {
         res.json(getAuthResponse(err, u));
       })(req, res);
