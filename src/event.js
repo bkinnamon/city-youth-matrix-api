@@ -3,28 +3,6 @@ const errors = require('./errors.js');
 
 const collectionName = process.env.DEBUG ? 'test_events' : 'events';
 
-// const fields = {
-// name: {
-// type: String,
-// required: true,
-// },
-// partner: {
-// type: String,
-// required: true,
-// },
-// start: {
-// type: Number,
-// require: true,
-// },
-// end: {
-// type: Number,
-// required: true,
-// },
-// description: {
-// type: String,
-// },
-// };
-
 function isValid(event) {
   return event.name
     && event.partner

@@ -36,14 +36,12 @@ async function register(username, password) {
     passHash,
     name: username,
     types: [],
-    contactInfo: {
-      address1: null,
-      address2: null,
-      city: null,
-      state: null,
-      zip: null,
-      phone: null,
-    },
+    address1: null,
+    address2: null,
+    city: null,
+    state: null,
+    zip: null,
+    phone: null,
   };
   const userDocRef = await db.collection(collectionName).add(user);
   const userDoc = await userDocRef.get();
